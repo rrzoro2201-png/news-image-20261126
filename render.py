@@ -298,6 +298,195 @@ def scene_mini(d, x, y, w, h, key):
                   fill=(185, 28, 28))
         d.ellipse([x + 52, y + 13, x + 62, y + 23], fill=(255, 255, 255))
 
+# ------------------------------------------------- vivid scene illustrations
+# Second pass: richer colour, gradients, smoke, people and skies. These
+# definitions replace the flatter ones above (same names, later wins).
+def scene_exchange(d, x, y, w, h):
+    import random
+    for i in range(h - 30):
+        t = i / max(1, h - 30)
+        r = int(15 + (51 - 15) * t)
+        g = int(23 + (65 - 23) * t)
+        b = int(42 + (85 - 42) * t)
+        d.line([(x, y + i), (x + w, y + i)], fill=(r, g, b))
+    rnd = random.Random(7)
+    for _ in range(26):
+        wx, wy = x + rnd.randint(6, w - 6), y + rnd.randint(6, 24)
+        d.ellipse([wx, wy, wx + 2, wy + 2], fill=(253, 224, 71))
+    for i in range(6):
+        cx = x + 14 + i * 50
+        d.rectangle([cx - 3, y + 28, cx + 25, y + 33], fill=(226, 232, 240))
+        d.rectangle([cx, y + 33, cx + 22, y + h - 44], fill=(148, 163, 184))
+        d.rectangle([cx, y + 33, cx + 6, y + h - 44], fill=(203, 213, 225))
+        d.rectangle([cx - 3, y + h - 44, cx + 25, y + h - 40], fill=(226, 232, 240))
+    sticks = [(30, 70, 12, 0), (80, 58, 14, 1), (130, 66, 10, 0),
+              (180, 50, 12, 1), (230, 60, 12, 0), (278, 84, 12, 1)]
+    for sx, top, bh, down in sticks:
+        col = (239, 68, 68) if down else (34, 197, 94)
+        d.line([(x + sx, y + top - 8), (x + sx, y + top + bh + 8)], fill=col, width=2)
+        d.rectangle([x + sx - 5, y + top, x + sx + 5, y + top + bh], fill=col)
+    for tx in (70, 150, 235):
+        d.ellipse([x + tx - 6, y + h - 62, x + tx + 6, y + h - 50], fill=(15, 23, 42))
+        d.polygon([(x + tx - 9, y + h - 50), (x + tx + 9, y + h - 50),
+                   (x + tx + 6, y + h - 34), (x + tx - 6, y + h - 34)],
+                  fill=(15, 23, 42))
+    d.rectangle([x, y + h - 34, x + w, y + h - 30], fill=(148, 163, 184))
+    d.rectangle([x, y + h - 30, x + w, y + h], fill=(185, 28, 28))
+    tape = "NASDAQ -3.9%   S&P -2.1%   DOW -1.4%"
+    d.text((x + 8, y + h - 24), tape, font=SANS_B(11), fill=(255, 255, 255))
+
+def scene_refinery(d, x, y, w, h):
+    for i in range(h):
+        t = i / h
+        r = int(124 + (253 - 124) * t)
+        g = int(45 + (148 - 45) * t)
+        b = int(45 + (70 - 45) * t)
+        d.line([(x, y + i), (x + w, y + i)], fill=(r, g, b))
+    d.ellipse([x + w - 78, y + 2, x + w - 14, y + 66], fill=(253, 215, 130))
+    d.ellipse([x + w - 66, y + 12, x + w - 26, y + 52], fill=(254, 240, 180))
+    for sx, sy, sr in ((60, 18, 16), (120, 10, 20), (180, 20, 14)):
+        d.ellipse([x + sx - sr, y + sy - sr // 2, x + sx + sr, y + sy + sr // 2],
+                  fill=(226, 232, 240))
+    d.rectangle([x + 30, y + 55, x + 58, y + h - 18], fill=(51, 65, 85))
+    d.rectangle([x + 70, y + 40, x + 92, y + h - 18], fill=(71, 85, 105))
+    d.rectangle([x + 104, y + 68, x + 150, y + h - 18], fill=(51, 65, 85))
+    d.rectangle([x + 162, y + 50, x + 210, y + h - 18], fill=(30, 41, 59))
+    for tx in (34, 74, 108, 166):
+        d.rectangle([x + tx, y + 30, x + tx + 6, y + h - 18], fill=(100, 116, 139))
+    for wy in range(y + 62, y + h - 24, 12):
+        d.rectangle([x + 36, wy, x + 40, wy + 3], fill=(253, 224, 71))
+        d.rectangle([x + 76, wy, x + 80, wy + 3], fill=(253, 224, 71))
+        d.rectangle([x + 110, wy, x + 114, wy + 3], fill=(253, 224, 71))
+    d.rectangle([x + 226, y + 22, x + 234, y + h - 18], fill=(100, 116, 139))
+    d.ellipse([x + 216, y - 6, x + 244, y + 22], fill=(249, 115, 22))
+    d.ellipse([x + 222, y + 0, x + 238, y + 16], fill=(253, 224, 71))
+    d.rectangle([x, y + h - 18, x + w, y + h], fill=(15, 23, 42))
+    for gx in range(10, w - 10, 26):
+        d.ellipse([x + gx, y + h - 14, x + gx + 4, y + h - 10], fill=(253, 224, 71))
+
+def scene_rocket(d, x, y, w, h):
+    import random
+    d.rectangle([x, y, x + w, y + h], fill=(15, 23, 42))
+    rnd = random.Random(26)
+    for _ in range(70):
+        sx, sy = x + rnd.randint(4, w - 4), y + rnd.randint(4, h - 60)
+        r = rnd.choice([1, 1, 2])
+        d.ellipse([sx, sy, sx + r, sy + r], fill=(226, 232, 240))
+    d.ellipse([x + 18, y + 10, x + 46, y + 38], fill=(254, 240, 180))
+    d.ellipse([x + 28, y + 8, x + 54, y + 36], fill=(15, 23, 42))
+    cx = x + w // 2
+    d.rectangle([cx - 52, y + 20, cx - 44, y + h - 40], fill=(100, 116, 139))
+    d.rectangle([cx + 44, y + 20, cx + 52, y + h - 40], fill=(100, 116, 139))
+    d.line([(cx - 52, y + 34), (cx - 14, y + 34)], fill=(148, 163, 184), width=2)
+    d.line([(cx + 14, y + 34), (cx + 52, y + 34)], fill=(148, 163, 184), width=2)
+    d.line([(cx - 52, y + 62), (cx - 14, y + 62)], fill=(148, 163, 184), width=2)
+    d.line([(cx + 14, y + 62), (cx + 52, y + 62)], fill=(148, 163, 184), width=2)
+    d.polygon([(cx, y + 8), (cx - 13, y + 34), (cx + 13, y + 34)], fill=(185, 28, 28))
+    d.rectangle([cx - 13, y + 34, cx + 13, y + 92], fill=(226, 232, 240))
+    d.rectangle([cx - 13, y + 58, cx + 13, y + 66], fill=(185, 28, 28))
+    d.ellipse([cx - 4, y + 42, cx + 4, y + 50], fill=(147, 197, 253))
+    d.polygon([(cx - 13, y + 92), (cx - 22, y + 104), (cx - 13, y + 104)], fill=(185, 28, 28))
+    d.polygon([(cx + 13, y + 92), (cx + 22, y + 104), (cx + 13, y + 104)], fill=(185, 28, 28))
+    d.polygon([(cx - 10, y + 104), (cx + 10, y + 104), (cx + 26, y + h - 8),
+               (cx - 26, y + h - 8)], fill=(249, 115, 22))
+    d.polygon([(cx - 5, y + 104), (cx + 5, y + 104), (cx + 12, y + h - 8),
+               (cx - 12, y + h - 8)], fill=(253, 224, 71))
+    for scx, scy, sr in ((cx - 48, h - 18, 18), (cx + 48, h - 14, 20),
+                         (cx - 76, h - 10, 13), (cx + 76, h - 10, 13)):
+        d.ellipse([scx - sr, y + scy - sr // 2, scx + sr, y + scy + sr // 2],
+                  fill=(203, 213, 225))
+    d.rectangle([x, y + h - 8, x + w, y + h], fill=(51, 65, 85))
+
+def scene_mini(d, x, y, w, h, key):
+    """Small card illustration, one livelier scene per story key."""
+    sky = {"chart": (219, 234, 254), "bank": (226, 232, 240),
+           "fire": (254, 215, 170), "drone": (186, 230, 253),
+           "refinery2": (254, 215, 170), "memorial": (226, 232, 240),
+           "parliament": (219, 234, 254), "factory": (254, 243, 199),
+           "flag": (254, 226, 226)}.get(key, (226, 232, 240))
+    d.rectangle([x, y, x + w, y + h], fill=sky)
+    d.ellipse([x + 6, y + 4, x + 22, y + 20], fill=(253, 224, 71))
+    if key == "chart":
+        for gy in (y + 16, y + 32, y + 48):
+            d.line([(x + 6, gy), (x + w - 6, gy)], fill=(191, 219, 254), width=1)
+        pts = [(x + 10, y + h - 16), (x + 50, y + 26), (x + 90, y + 34),
+               (x + 130, y + 16), (x + 175, y + h - 10)]
+        d.line(pts, fill=(185, 28, 28), width=3)
+        for px, py in pts:
+            d.ellipse([px - 3, py - 3, px + 3, py + 3], fill=(185, 28, 28))
+    elif key == "bank":
+        d.polygon([(x + w // 2, y + 8), (x + 18, y + 26), (x + w - 18, y + 26)],
+                  fill=(51, 65, 85))
+        for i in range(4):
+            cx = x + 34 + i * 42
+            d.rectangle([cx, y + 28, cx + 14, y + h - 10], fill=(100, 116, 139))
+        d.rectangle([x + 14, y + h - 10, x + w - 14, y + h - 6], fill=(51, 65, 85))
+        d.rectangle([x + 10, y + h - 6, x + w - 10, y + h - 2], fill=(71, 85, 105))
+    elif key == "fire":
+        d.ellipse([x + 30, y + 4, x + 46, y + 16], fill=(156, 163, 175))
+        d.ellipse([x + 44, y + 2, x + 62, y + 14], fill=(203, 213, 225))
+        d.polygon([(x + w // 2, y + 12), (x + w // 2 - 26, y + h - 14),
+                   (x + w // 2 + 26, y + h - 14)], fill=(249, 115, 22))
+        d.polygon([(x + w // 2, y + 30), (x + w // 2 - 13, y + h - 14),
+                   (x + w // 2 + 13, y + h - 14)], fill=(253, 224, 71))
+        for ex, ey in ((x + 30, y + 44), (x + w - 34, y + 38), (x + 52, y + 52)):
+            d.ellipse([ex, ey, ex + 3, ey + 3], fill=(249, 115, 22))
+        d.rectangle([x, y + h - 8, x + w, y + h], fill=(51, 65, 85))
+    elif key == "drone":
+        for cx0 in (x + 24, x + w - 52):
+            d.ellipse([cx0, y + 8, cx0 + 22, y + 16], fill=(255, 255, 255))
+            d.ellipse([cx0 + 8, y + 4, cx0 + 28, y + 12], fill=(255, 255, 255))
+        d.ellipse([x + w // 2 - 12, y + 22, x + w // 2 + 12, y + 40], fill=(51, 65, 85))
+        for dx in (-34, 34):
+            d.line([(x + w // 2 + dx - 16, y + 18), (x + w // 2 + dx + 16, y + 18)],
+                   fill=(100, 116, 139), width=3)
+            d.ellipse([x + w // 2 + dx - 4, y + 26, x + w // 2 + dx + 4, y + 34],
+                      fill=(30, 41, 59))
+        d.line([(x + w // 2, y + 40), (x + w // 2, y + h - 8)], fill=(100, 116, 139), width=2)
+        d.line([(x + 16, y + 48), (x + 20, y + 44), (x + 24, y + 48)], fill=(51, 65, 85), width=2)
+    elif key == "refinery2":
+        d.ellipse([x + 40, y + 4, x + 58, y + 14], fill=(203, 213, 225))
+        d.rectangle([x + 24, y + 22, x + 52, y + h - 8], fill=(51, 65, 85))
+        d.rectangle([x + 64, y + 12, x + 86, y + h - 8], fill=(71, 85, 105))
+        d.rectangle([x + 98, y + 30, x + 140, y + h - 8], fill=(51, 65, 85))
+        d.rectangle([x + 152, y + 8, x + 158, y + h - 8], fill=(100, 116, 139))
+        d.ellipse([x + 146, y - 2, x + 164, y + 12], fill=(249, 115, 22))
+        d.ellipse([x + 150, y + 2, x + 160, y + 10], fill=(253, 224, 71))
+        for wy in range(y + 28, y + h - 12, 10):
+            d.rectangle([x + 30, wy, x + 34, wy + 3], fill=(253, 224, 71))
+    elif key == "memorial":
+        d.rectangle([x, y + h - 10, x + w, y + h], fill=(134, 239, 172))
+        for i in range(5):
+            cx = x + 22 + i * 34
+            d.rectangle([cx, y + h - 34, cx + 16, y + h - 10], fill=(100, 116, 139))
+            d.ellipse([cx + 3, y + h - 44, cx + 13, y + h - 34], fill=(148, 163, 184))
+        d.rectangle([x, y + h - 10, x + w, y + h - 8], fill=(51, 65, 85))
+    elif key == "parliament":
+        d.rectangle([x + w // 2 - 1, y + 2, x + w // 2 + 1, y + 10], fill=(100, 116, 139))
+        d.polygon([(x + w // 2 + 1, y + 2), (x + w // 2 + 16, y + 5),
+                   (x + w // 2 + 1, y + 9)], fill=(185, 28, 28))
+        d.polygon([(x + w // 2, y + 10), (x + 30, y + 30), (x + w - 30, y + 30)],
+                  fill=(185, 28, 28))
+        for i in range(5):
+            cx = x + 30 + i * 30
+            d.rectangle([cx, y + 32, cx + 12, y + h - 8], fill=(51, 65, 85))
+        d.rectangle([x + 18, y + h - 8, x + w - 18, y + h - 4], fill=(51, 65, 85))
+    elif key == "factory":
+        d.ellipse([x + 30, y + 2, x + 48, y + 12], fill=(203, 213, 225))
+        d.rectangle([x + 20, y + 26, x + w - 20, y + h - 8], fill=(51, 65, 85))
+        d.rectangle([x + 34, y + 10, x + 44, y + 26], fill=(100, 116, 139))
+        d.rectangle([x + 54, y + 16, x + 62, y + 26], fill=(100, 116, 139))
+        for i in range(3):
+            d.rectangle([x + 36 + i * 44, y + 36, x + 58 + i * 44, y + 52],
+                        fill=(254, 243, 199))
+    elif key == "flag":
+        for cx0 in (x + 60, x + w - 70):
+            d.ellipse([cx0, y + 6, cx0 + 20, y + 13], fill=(255, 255, 255))
+        d.rectangle([x + 30, y + 8, x + 36, y + h - 6], fill=(100, 116, 139))
+        d.polygon([(x + 36, y + 8), (x + w - 30, y + 16), (x + 36, y + 28)],
+                  fill=(185, 28, 28))
+        d.ellipse([x + 52, y + 13, x + 62, y + 23], fill=(255, 255, 255))
+
 LEAD_SCENES = {"exchange": scene_exchange, "refinery": scene_refinery,
                "rocket": scene_rocket}
 
@@ -312,7 +501,7 @@ def fit_text(d, text, fnt_fn, size, max_w, start=15):
     return fnt_fn(8)
 
 def draw_map(d, x, y, w, h):
-    d.rectangle([x, y, x + w, y + h], fill=(255, 255, 255), outline=(203, 213, 225))
+    d.rectangle([x, y, x + w, y + h], fill=(191, 219, 254), outline=(203, 213, 225))
     land = (226, 232, 240)
     polys = {
         "na": [(8, 14), (40, 8), (70, 14), (85, 10), (95, 22), (80, 30), (60, 28), (40, 34), (18, 30), (8, 22)],
